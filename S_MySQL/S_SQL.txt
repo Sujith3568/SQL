@@ -1,0 +1,371 @@
+note: the schema and database are nothing but the same
+
+details: the database is college 
+
+1)Traditional file System:
+-> controls how data stores and retrieves
+solution to this is-> SQL and Database
+what is SQL->the language used b/n user and database-> it stores the data in the structure(rows and columns)
+commands in SQL:
+-> DDL(data definition language) -> deals with the database schema and its creation -> operations: create, alter and delete 
+-> DCL(data control language)-> control access to the database -> commands GRANT -> provide user access privilege to database and revoke-> withdraw the user access
+->DML(data manipulation language)->access and manipulate data i.e insert, update , retrive and delete 
+->TCL(trancation control language)->commands: comment ,rollback , saypoint and save transcation
+
+
+2)SQL basics:
+
+a)data->collection of facts,figures and values from different sources that make meaningfull things
+b)database ->organized collection of data which can be accessed electronically
+SYNTEX(related to database):
+->create a database :
+	<(keyword) ie-> create database> <database name>; 	eg: create database myexample;
+->delete a database:
+	<(keyword) ie-> drop database> <database name>;
+	eg:drop database myexample;
+c)tables-> collection of data in a tabular way (rows and columns)-> data elements are also called values -> point of intersection of row and column called cell
+->tuple -> a single row of a table that containsingle record for that relation
+-> attribute-> features of a table is called attribute->it has name and a datatype
+-> table constraints->primary key, foreign key, not null, index, check default, unique
+note:-> use <database_name>; -> before creating the table 
+SYNTEX(related to table):
+->create a table:
+	<(keyword) ie-> create table > <table name> (columns name with datatype);
+	eg: create table exp(id int not null, name varchar2(20), address varchar2(30), primary key(id)); or
+	    create table exp(id int primary key, name varchar2(20), address varchar2(30));
+->delete a table:
+	<(keyword) ie drop table <table name>;
+	eg: drop table exp;
+->DESCRIBE <TABLE_NAME>; -- to see the schema of the table
+
+3)Basic SQL queries (SYNTEX):
+	SELECT:
+	select->  select column 1,column2 from <table name>; or select * from <table name>;-> for all columns
+
+	WHERE QUERY: ->used to filter records
+	select	<column> from <table name> where <condition>;
+	eg:select fname from student where address="Karnataka";
+
+	AND :-> display the result when all and condition are true
+	select <column > from <table_name> where <condition1> AND <condition2>;
+	eg: select * from student where fname="abc" AND lname="pqr";
+
+	OR operator:->display result if any of the condition is true
+	select <column> from <table_name> where <condition1> OR <condition2>;
+
+	NOT:-> display result if condition/s is/are not true
+	select <column> from <table_name> where NOT <condition>;	
+	eg: select * from student where NOT fname="Ashok"; -> display all others details except Ashok
+
+	INSERT INTO :-> insert the value into table
+	INSERT INTO <table_name>(<column1>,<column2>,..) VALUES (val1,val2,...);
+
+4)Aggrigate functions:->multiple rows are taken as input based on some criteria and single o/p is return
+	COUNT:-> return no of rows that match the required criteria
+	COUNT(<column_name>) from <table_name> where <condition>; or COUNT(<column_name>) from <table_name>;
+	eg:select COUNT(sid) from student; -> after COUNT not have to use the space ie->COUNT(<column_name>)
+
+	AVERAGE:-> to give the average of numeric column
+	select AVG(<column_name>) from <table_name> where <condition>; or select AVG(<column_name>) where <condition>; 
+
+	SUM:-> returns the total sum of the particular numeric column
+	select SUM(<column_name>) from <table_name> where <condition>; or select SUM(<column_name>) from <table_name>;
+
+	MIN(minimum):-> returns the minimum (smallest) value of the column
+	select MIN(<column_name>) from <table_name> where <condition>; or select MIN(<column_name>) from <table_name>;
+->if we want to select multiple column then
+SELECT sid, sname,marks 
+FROM student
+WHERE marks = (SELECT MIN(marks) FROM student);
+
+	MAX(maximun):-> returns the maximum (largest) value of the column
+	select MAX(<column_name>) from <table_name> where <condition>; or select MAX(<column_name>) from <table_name>;
+
+
+	GEOUP BY :-> arrange the similar type of data into a group
+	select <colunm_name> from <table_name> where <condition> GROUP BY <column name>; 
+
+	HAVING:->as where condition cannot be used with aggregate haveing is used-> used to decide which group should be executed -> mainly used with agrigate function 
+	select <colunm_name> from <table_name> where <condition> GROUP BY <column name> HAVING <condition>; 
+
+	ORDER BY:-> used to order the result in ascending or descending order -> by default it is in ascending oeder
+	select <colunm_name> from <table_name> ORDER BY <column1,column2,...> ASC|DESC;
+
+NULL VALUIES:-> the table with no values but not 0 ->
+ 	IS NULL:-> to see the null values in the column
+	select <column_name> from <table_name> where <column_name> IS NULL; 
+
+	IS NOT NULL:->
+	select <column_name> from <table_name> where <column_name> IS NOT NULL; 
+
+	UPDATE:-> used to modify the rows
+	update <table_name> SET <column1>=<value1>,<column2> =<value2> ... where <condition>; 
+	DELETE:-> delete the entire row from a table
+	delete from <table_name> where <condition>; 
+
+IN operator:-> used to specify the multiple operator inside where clause 
+	select <column_name/s> from <table_name> where <column_name> IN (value1,value2,...);  
+
+	BETWEEN OPERATOR:-> select the value between the two values-> it is compulsory to add the begining and end values
+	select <column_name> from <table_name> where <column_name> between <value1> AND <value2>;
+	
+aliases (ALIAS)-> process  of giving a table or column a temporary name
+	COLUMN ALIAS: ;
+	select <column_name> AS <alias_name> from <table_name>;
+	TABLE ALIAS: ;
+	select <column_name>  from <table_name>	AS <alias_name>;
+comparison operator: >,<,=,>=,<= can be used  in where condition
+LIKE condition: -> used to fetch the like relation 
+ select * from dept_name where like 'c%'; -> gives list of all dept_name which are start from c alphabet 
+
+case operation:-> it work like if else statement-> there should not be use null
+eg: select CASE(loc)
+when 'chennai' then 'tamilnadu'
+when 'banglore' then 'karnataka'
+else  'no idea'
+END
+from dept;
+
+5)normalization in sql:-> organizing the data in a systematic way in the database
+ there a 3 types of data anomalies occur during the managing the data ->insertion,deletion,update
+to overcome the above problem the 1nf,2nf,3nf and bcnf come into picture
+
+6) Triggers:->are sql code that automatically executed in response to certain events on the particular table
+syntax&eg: Create Trigger Trigger_name  -- trigger name should be unique and should not be repeat
+	   (Before | After)  -- the time line when to use the trigger-> can't be use after trigger for update  
+	   [insert |delete | update]
+	   on [table_name]
+	  [ for each row | for each column ]  # can be executed after or before any column value change the row  -> but column only applied when the column value changes 
+	  [trigger_body ] -- consist ofthe body that need to be executed when the trigger is called
+
+eg:
+CREATE TRIGGER sample_trigger
+before INSERT
+ON student
+FOR EACH ROW
+SET new.marks = new.marks+6;  //new keyword  refers to the row that is effected
+
+nested trigger->that can do multiple process
+
+operation on triggers:
+-> drop -> to remove a trigger from database -> DROP TRIGGER trigger_name;
+
+-> display-> to display trigger from  the  database -> SHOW TRIGGER IN database_name; 
+
+Insert:
+-> before insert-> to update or validate the record values before they where saved to database 
+eg: create trigger calculate 
+before insert
+on student
+for each row
+set new.marks=new.marks+100;
+
+->after insert->used to access field values that are set by the system and to effect changes in other records
+eg: create trigger total_marks
+after insert
+on student
+for each row 
+insert into final_marks values(new.marks);
+
+SQL joins:are the commands used to combine rows from two or more table based on related column b/n those tables
+
+types:
+->inner join-> return the record that have matching value in both tables
+Syntax: 
+SELECT table1.column1,table1.column2,table2.column1,...  # table1.column1 -> table name from which u r selecting.column name which column u want to select   
+from table1
+INNER JOIN Table2
+ON table1.MatchingColumnName = table2.MatchingColumnName; # inner join of table2 on table1
+
+->left join or left outer join-> gives all the record of the left table and also the record of the right table that satisfy the condition 
+syntax:
+SELECT table1.column1,table1.column2,table2.column1,...    
+from table1
+LEFT JOIN Table2
+ON table1.MatchingColumnName = table2.MatchingColumnName; 
+
+->right join-> gives all the record of the right table and also the record of the left table that satisfy the condition 
+syntax:
+SELECT table1.column1,table1.column2,table2.column1,...    
+from table1
+RIGHT JOIN Table2
+ON table1.MatchingColumnName = table2.MatchingColumnName;
+
+->full join or full outer join ->  return all the record that have a match either in the left table or in the right table
+syntax:
+SELECT table1.column1,table1.column2,table2.column1,...    
+from table1
+FULL JOIN Table2
+ON table1.MatchingColumnName = table2.MatchingColumnName;
+
+extra:
+->natural join -> combine the rows from table based on column with same name and compatible datatype in both table
+syntax:
+SELECT * 
+FROM students
+NATURAL JOIN <table_name>; 
+	
+
+SQL built-in function:->used to calculate value and manipulate data-> they can be used in any where in select statement also -> types
+1. String Functions
+	CONCAT(str1, str2, ...): Concatenates multiple strings.
+	SUBSTRING(str, start, length): Extracts a substring from a string.
+	LENGTH(str): Returns the length of a string.
+	(str): Removes leading and trailing spaces from a string.
+	UPPER(str): Converts a string to uppercase.
+	LOWER(str): Converts a string to lowercase.
+2. Numeric Functions
+	ROUND(number, decimals): Rounds a number to a specified number of decimal places.
+	CEILING(number): Rounds a number up to the nearest integer.
+	FLOOR(number): Rounds a number down to the nearest integer.
+	ABS(number): Returns the absolute value of a number.
+3. Date and Time Functions
+	NOW(): Returns the current date and time.
+	CURDATE(): Returns the current date.
+	DATE_FORMAT(date, format): Formats a date value based on a specified format.
+	DATE_ADD(date, INTERVAL value unit): Adds a time interval to a date.
+	DATEDIFF(date1, date2): Returns the difference in days between two dates.
+4. Aggregate Functions
+	COUNT(column): Returns the number of rows in a group.
+	SUM(column): Returns the sum of values in a column.
+	AVG(column): Returns the average value of a column.
+	MAX(column): Returns the maximum value in a column.
+	MIN(column): Returns the minimum value in a column.
+5. Conditional Functions
+	IF(condition, true_value, false_value): Returns one value if the condition is true and another if it’s false.
+	CASE: Allows for conditional logic in queries, similar to IF.
+6. Conversion Functions
+	CAST(expression AS type): Converts an expression from one data type to another.
+	CONVERT(expression, type): Converts an expression to a specified data type.
+7. Mathematical Functions
+	POWER(base, exponent): Returns the base raised to the exponent.
+	SQRT(number): Returns the square root of a number.
+	LOG(number): Returns the natural logarithm of a number.
+8. Control Flow Functions
+	IFNULL(expression, value): Returns a specified value if the expression is NULL.
+	NULLIF(expression1, expression2): Returns NULL if the two expressions are equal; otherwise, returns the first expression.
+9. Information Functions
+	VERSION(): Returns the version of the database server.
+	DATABASE(): Returns the name of the current database.
+
+stored procedure : is a set of sql statement with a name that hs been created and stored in the database -> can be defined as set of logical group of sql statements which  are grouped to perform a specific task
+syntax: -- for sql not for mysql
+CREATE [OR ALTER] PROCEDURE schema_name.procedure_name(@procedure_nameAS parameter _data-type[OUT]) -- use the OUT  for output parameter 
+AS
+BEGIN
+ <sql statements / computation>
+END; -- ALTER to alter the procedure 
+
+
+user defined function:-> 2 types 
+-> scalar func: -> return the single data value of type defined in the RETURNS clause 
+syntax:
+CREATE [OR ALTER] FUNCTION schema_name.procedure_name(@procedure_nameAS parameter _data-type[OUT]) -- use the OUT  for output parameter 
+RETURNS return_data_type
+AS
+BEGIN
+ <sql statements / computation>
+ RETURN scalar_value
+END; 
+
+-> table valued function -> inline -> returns the entire table -> MySQL does not have inline table value func 
+syntax:
+CREATE [OR ALTER] FUNCTION schema_name.procedure_name(@procedure_nameAS parameter _data-type) -- use the OUT  for output parameter 
+RETURNS TABLE
+AS
+BEGIN
+ <sql statements / computation>
+END; 
+-> multi-statement table-> return the table along with that we can change the format of the table 
+
+
+SQL VS MySQL:
+->defination-> sql is a standard language for operating,managing& accessing database -> MySQL is a RDBMS for storeing,retriveing modifying and administering database
+-> sql programming language ->MySQL is a software  allows dtat manipulation,storage,modification and deletion in tabular format
+
+sql vs NoSQL:
+types of database -> relational database i.e have tables related to each other -> non relational database
+schema-> should be pre-defined -> predefined schema is not required 
+
+MySQL vs mangoDB
+->schema -> json like type format
+->INSERT INTO employee(eid,ename) VALUES (1,'abc');  ->  db.employees.insert({ employee_id:'abc 001' , age: 23,)}
+-> database & tables -> database and collections
+
+char vs varchar2 datatype
+char is used for string of fixed length -> varchar is used for character string of variable length
+
+
+sql for datascience:
+to import dataset in mysql-> create a database -> tables -> right click-> table data import wizard -> browse for csv file -> next ->  create new table or we can use the existing table ->next-> next -> finish -> refresh the database
+
+limit-> used to limit the output -> select * from employee limit 5;
+offset-> to select the specific no of rows after the limit -> select * from employee  limit 3 offset 5 ;
+fetch -> one of the way to limit the query -> select * from employee fetch first 6 rows only;  // it cannot be used in the sql directly 
+
+
+BEGIN-> to begin  the transaction
+ROLLBACK -> to retive the transaction
+COMMIT-> to save the transaction
+ABORT -> to abort the changes
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+note:
+
+to comment -> # or --(space) or /* for multiple line */
+sql-> language used to communicate between database
+MySQL-> is a dbms -> which allows us to communicate with database with SQL language -> MySQL and SQL server are the same in terms of their work 
+foreign key-> maintain the referential integrity by enforcing a link b/n the data in two tables -> child table reference the primary key in parent table 
+entity-> a person ,palce or things in the real world about which data can be stored in a database
+relationship-> relation or link b/n the entities that have something to do with each other
+
+-> use <database_name>; -> before creating the table
+-> Any column listed in the SELECT statement that is not part of an aggregate function must be included in the GROUP BY clause.
+->if the value in left table has no matching value in the right then its value will be null in the right table 
+-> for right join it is vice-versa of left join
+-> in mysql workbench full join will not work to get full join use UNION in between left join and right join
+-> if we use only JOIN keyword without specifying then it will consider INNER JOIN by default
+->in select operation we can use +,/,*,- function
+-> if we use the MAX function for the string then it will return the result which has maximum length of words
+-> in MySQL we cannot alter the existing function and stored procedure -> instead drop the func or stored procedure and recreate it
+-> TRUNCATE -> USED TO DELETE all the rows from table -> TRUNCATE table <table_name>;
+->table-> collection of data in a organised manner
+->field-> no of column in the table
+->attribute-> column name
+->tuple-> the data in the row  
+->subquery-> a query inside another query
+->recursive stored procedure-> refers to a stored procedure which calls by itself until it reaches some boundary condition
+->view -> which consists of subset of data contained in a table
+-> Datawarehouse -> refers to a central repository of data where the data is assembled from multiple source of information
+->to select the particular column use the ` ` eg: SELECT `salary-annual` from employee;
+-> we can use the table name to extract the multiple column eg: e.name ,e.salary 
+-> to add foreign key using alter keyword -> ALTER TABLE <table_name> ADD FOREIGN KEY (<foreign key name>) REFERENCES <table_name>(<primary key_name>);
+		eg:  ALTER TABLE department ADD FOREIGN KEY (mgr_ssn) REFERENCES employee(ssn);
+-> we can grant permission to the particular user by using the GRANT and can revoke it by  using REVOKE -> REVOKE SELECT ON college.courses FROM 'user_name'@'%';
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+extra:
+
+types of database:
+distributed database		graph database
+object oriented database	NoSQL database(p)
+centralized database		cloud database
+operational database 		relational database(p)->uses SQL lang.
+
+types of dbms-> hierarchical , network, relational & object-oriented
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+question:
+
+1)what is natural join & when it is used-> used when we want the no of column returned should be less
+2)how to map many-to-many relationship using joins->occurs when multiple records in one table can relate to multiple records in another table. 
+3)what  is hash join ->A hash join is a type of join algorithm used in database systems to join two tables efficiently, especially when the tables are large and do not have indexes on the join keys. used-> large table, no index, memory availability
+4)what is self & cross join-> self join-> table is joined with itself. It is useful when you want to compare rows within the same table or find relationships between rows in the same table. 
+cross join->Produces a Cartesian product of two tables -> ex.pic in folder
+5)how to perform join operation on 3 table -> we can use same as many to many join 
+6) dbms-> is a software application that interacts b/n user, application and database itself to  capture and analyse data  
+7) primary key-> a set of attribute that can be used to uniquely identify every tuple 
+8)constraints->specify the limit of the data type of a table -> types-> not null, default, check, index, unique
+9)ACID-> atomicity, consistency, isolation and durability
+10)trigger-> are stored procedure that are defined to execute automatically in place or after data modification -> 6 types -> BEFORE INSERT ,AFTER INSERT, BEFORE UPDATE,AFTER UPDATE ,BEFORE DELETE ,AFTER DELETE
+operators in sql -> arithmetic, bitwise, comparison, compound ,logical
+11)set operators->union ,intersect ,minus
+
